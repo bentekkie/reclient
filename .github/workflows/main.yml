@@ -22,6 +22,9 @@ jobs:
         with:
           fetch-depth: 0
           submodules: recursive
+      - uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d
+        with:
+          python-version: '3.11' 
       - name: Get Bazel
         uses: bazel-contrib/setup-bazel@b388b84bb637e50cdae241d0f255670d4bd79f29
         with:
