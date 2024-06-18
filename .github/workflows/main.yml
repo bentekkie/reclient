@@ -45,17 +45,15 @@ jobs:
       - if: contains(matrix.os, 'windows')
         name: Checkout depot tools (win)
         run: git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git C:\src\depot_tools
+      - if: runner.os == 'macOS'
+        name: Remove Openssl
+        run: sudo rm -rf /usr/local/include/openssl /usr/local/lib/libcrypto.*
       - if: runner.os == 'Windows'
         name: Add depot tools to path (win)
         run: |
-           "C:\src\depot_tools" | Out-File -FilePath $env:GITHUB_PATH -Append
-      - if: runner.os == 'Windows'
-        name: Add python to path (win)
-        run: |
-          "${{ env.pythonLocation }}" | Out-File -FilePath $env:GITHUB_PATH -Append
+           "PATH=C:\src\depot_tools;${{ env.pythonLocation }};${env:PATH}" | Out-File -FilePath $env:GITHUB_PATH -Append
       - name: Configure BAZEL_SH (Windows)
         run: echo "BAZEL_SH=C:\MSYS64\usr\bin\bash.exe" >> $env:GITHUB_ENV
         if: runner.os == 'Windows'
-
       - name: Bazel Build
         run: bazel build --config=${{ matrix.includescanner }} --//:use_android_glibc=true //:artifacts.tar
