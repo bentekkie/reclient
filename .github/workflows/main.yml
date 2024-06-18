@@ -56,4 +56,5 @@ jobs:
           Add-Content $env:GITHUB_PATH "${{ env.pythonLocation }}"
           Add-Content $env:GITHUB_ENV "BAZEL_SH=C:\MSYS64\usr\bin\bash.exe"
       - name: Bazel Build
+        shell: bash
         run: bazel build --config=${{ matrix.includescanner }} --//:use_android_glibc=true //:artifacts.tar
