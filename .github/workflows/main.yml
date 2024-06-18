@@ -52,5 +52,13 @@ jobs:
         name: Add depot tools to path (win)
         run: |
           Add-Content $env:GITHUB_ENV "BAZEL_SH=C:\MSYS64\usr\bin\bash.exe"
+      - if: runner.os == 'Windows'
+        name: Install pacman deps
+        run: |
+          pacman -S --noconfirm unzip
+          pacman -S --noconfirm patch
+          pacman -S --noconfirm mingw-w64-x86_64-gcc
+          pacman -S --noconfirm mingw-w64-x86_64-python
+          cat $env:PATH
       - name: Bazel Build
-        run: bazel build --config=${{ matrix.includescanner }} --//:use_android_glibc=true //:artifacts.tar
+        run: bazel build --config=${{ matrix.includescanner }} --jobs=50 --//:use_android_glibc=true //:artifacts.tar
