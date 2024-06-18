@@ -33,10 +33,18 @@ jobs:
           repository-cache: true
 
       # Checkout the depot tools they are needed by the goma repository
-      - name: Checkout depot tools
+      - if: ! contains(matrix.os, 'windows')
+        name: Checkout depot tools
         run: git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-      - name: Update PATH
+      - if: ! contains(matrix.os, 'windows')
+        name: Update PATH
         run: echo "$(pwd)/depot_tools" >> $GITHUB_PATH
+      - if: contains(matrix.os, 'windows')
+        name: Checkout depot tools (win)
+        run: git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git C:\src\depot_tools
+      - if: contains(matrix.os, 'windows')
+        name: Update PATH (win)
+        run: echo "C:\src\depot_tools" >> $GITHUB_PATH
 
       - name: Bazel Build
         run: bazel build --config=${{ matrix.includescanner }} --//:use_android_glibc=true //:artifacts.tar
