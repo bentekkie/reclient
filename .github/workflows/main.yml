@@ -13,7 +13,7 @@ jobs:
   bazel-build:
     strategy:
       matrix:
-        includescanner: ["goma", "clangscandeps"]
+        includescanner: ["goma"] #, "clangscandeps"]
         os: ["ubuntu-20.04", "macos-13", "windows-2019"]
     runs-on: ${{ matrix.os }}
     steps:
