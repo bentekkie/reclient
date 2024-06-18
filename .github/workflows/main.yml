@@ -33,10 +33,10 @@ jobs:
           repository-cache: true
 
       # Checkout the depot tools they are needed by the goma repository
-      - if: ! contains(matrix.os, 'windows')
+      - if: contains(matrix.os, 'windows') == false
         name: Checkout depot tools
         run: git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-      - if: ! contains(matrix.os, 'windows')
+      - if: contains(matrix.os, 'windows') == false
         name: Update PATH
         run: echo "$(pwd)/depot_tools" >> $GITHUB_PATH
       - if: contains(matrix.os, 'windows')
