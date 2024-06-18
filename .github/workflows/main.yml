@@ -47,9 +47,9 @@ jobs:
         run: git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git C:\src\depot_tools
       - if: runner.os == 'Windows'
         name: Update PATH (win)
-        run: echo "PATH=C:\src\depot_tools;${{ env.pythonLocation }}" >> $GITHUB_ENV
+        run: echo "PATH=C:\src\depot_tools;${{ env.pythonLocation }}" >> $env:GITHUB_ENV
       - name: Configure BAZEL_SH (Windows)
-        run: echo "BAZEL_SH=C:\MSYS64\usr\bin\bash.exe" >> $GITHUB_ENV
+        run: echo "BAZEL_SH=C:\MSYS64\usr\bin\bash.exe" >> $env:GITHUB_ENV
         if: runner.os == 'Windows'
 
       - name: Bazel Build
