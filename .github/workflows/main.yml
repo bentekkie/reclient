@@ -45,18 +45,11 @@ jobs:
       - if: contains(matrix.os, 'windows')
         name: Checkout depot tools (win)
         run: git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git C:\src\depot_tools
-      - if: contains(matrix.os, 'windows')
+      - if: runner.os == 'Windows'
         name: Update PATH (win)
-        run: echo "C:\src\depot_tools" >> $GITHUB_PATH
-      - name: Configure system (Windows)
-        # Make Bazel find the right binaries on GitHub.  See
-        # https://bazel.build/install/windows#bazel_does_not_find_bash_or_bashexe.
-        # Work around https://github.com/protocolbuffers/protobuf/issues/12947.
-        # See https://bazel.build/configure/windows#long-path-issues.  Note that
-        # the .bazelrc parser treats backslashes as escape characters, so we have
-        # to escape them.
-        shell: cmd
-        run: ECHO BAZEL_SH=C:\MSYS64\usr\bin\bash.exe>> %GITHUB_ENV%
+        run: echo "PATH=C:\src\depot_tools;${{ env.pythonLocation }}" >> $GITHUB_ENV
+      - name: Configure BAZEL_SH (Windows)
+        run: echo "BAZEL_SH=C:\MSYS64\usr\bin\bash.exe" >> $GITHUB_ENV
         if: runner.os == 'Windows'
 
       - name: Bazel Build
