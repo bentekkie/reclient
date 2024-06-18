@@ -54,6 +54,7 @@ jobs:
           Add-Content $env:GITHUB_ENV "BAZEL_SH=C:\MSYS64\usr\bin\bash.exe"
       - if: runner.os == 'Windows'
         name: Install pacman deps
+        shell: C:\msys64\usr\bin\bash.exe {0}
         run: |
           pacman -S --noconfirm unzip
           pacman -S --noconfirm patch
