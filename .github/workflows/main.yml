@@ -1,0 +1,31 @@
+name: basic
+run-name: postsubmit run
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  bazel-build-ubuntu:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+      - name: Get Bazel
+        uses: bazel-contrib/setup-bazel@b388b84bb637e50cdae241d0f255670d4bd79f29
+        with:
+          # Avoid downloading Bazel every time.
+          bazelisk-cache: true
+          # Store build cache per workflow.
+          disk-cache: ${{ github.workflow }}
+          # Share repository cache between workflows.
+          repository-cache: true
+      - name: Bazel Build
+        run: bazel build //:artifacts.tar
