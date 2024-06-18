@@ -52,8 +52,8 @@ jobs:
         name: Add depot tools to path (win)
         run: |
           Add-Content $env:GITHUB_ENV "BAZEL_SH=C:\MSYS64\usr\bin\bash.exe"
-          echo ::add-path::C:\MSYS64\usr\bin
-          echo ::add-path::C:\tools\msys64\mingw64\bin
+          echo C:\MSYS64\usr\bin | Out-File -FilePath $env:GITHUB_PATH -Append
+          echo C:\tools\msys64\mingw64\bin | Out-File -FilePath $env:GITHUB_PATH -Append
       - if: runner.os == 'Windows'
         name: Install pacman deps
         shell: C:\msys64\usr\bin\bash.exe {0}
