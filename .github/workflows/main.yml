@@ -46,8 +46,13 @@ jobs:
         name: Checkout depot tools (win)
         run: git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git C:\src\depot_tools
       - if: runner.os == 'Windows'
-        name: Update PATH (win)
-        run: echo "PATH=C:\src\depot_tools;${{ env.pythonLocation }}" >> $env:GITHUB_ENV
+        name: Add depot tools to path (win)
+        run: |
+           "C:\src\depot_tools" | Out-File -FilePath $env:GITHUB_PATH -Append
+      - if: runner.os == 'Windows'
+        name: Add python to path (win)
+        run: |
+          "${{ env.pythonLocation }}" | Out-File -FilePath $env:GITHUB_PATH -Append
       - name: Configure BAZEL_SH (Windows)
         run: echo "BAZEL_SH=C:\MSYS64\usr\bin\bash.exe" >> $env:GITHUB_ENV
         if: runner.os == 'Windows'
