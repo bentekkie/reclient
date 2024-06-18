@@ -51,9 +51,9 @@ jobs:
       - if: runner.os == 'Windows'
         name: Add depot tools to path (win)
         run: |
-           echo "C:\Program Files\Git\bin\;C:\src\depot_tools;${{ env.pythonLocation }};${env:PATH}" | Out-File -FilePath $env:GITHUB_PATH -Append
-      - name: Configure BAZEL_SH (Windows)
-        run: echo "BAZEL_SH=C:\MSYS64\usr\bin\bash.exe" >> $env:GITHUB_ENV
-        if: runner.os == 'Windows'
+          Add-Content $env:GITHUB_PATH "C:\Program Files\Git\bin"
+          Add-Content $env:GITHUB_PATH "C:\src\depot_tools"
+          Add-Content $env:GITHUB_PATH "${{ env.pythonLocation }}"
+          Add-Content $env:GITHUB_ENV "BAZEL_SH=C:\MSYS64\usr\bin\bash.exe"
       - name: Bazel Build
         run: bazel build --config=${{ matrix.includescanner }} --//:use_android_glibc=true //:artifacts.tar
