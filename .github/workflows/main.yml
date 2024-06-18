@@ -48,6 +48,16 @@ jobs:
       - if: contains(matrix.os, 'windows')
         name: Update PATH (win)
         run: echo "C:\src\depot_tools" >> $GITHUB_PATH
+      - name: Configure system (Windows)
+        # Make Bazel find the right binaries on GitHub.  See
+        # https://bazel.build/install/windows#bazel_does_not_find_bash_or_bashexe.
+        # Work around https://github.com/protocolbuffers/protobuf/issues/12947.
+        # See https://bazel.build/configure/windows#long-path-issues.  Note that
+        # the .bazelrc parser treats backslashes as escape characters, so we have
+        # to escape them.
+        shell: cmd
+        run: ECHO BAZEL_SH=C:\MSYS64\usr\bin\bash.exe>> %GITHUB_ENV%
+        if: runner.os == 'Windows'
 
       - name: Bazel Build
         run: bazel build --config=${{ matrix.includescanner }} --//:use_android_glibc=true //:artifacts.tar
