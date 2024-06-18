@@ -10,8 +10,12 @@ on:
     - main
 
 jobs:
-  bazel-build-ubuntu:
-    runs-on: ubuntu-20.04
+  bazel-build:
+    strategy:
+      matrix:
+        includescanner: ["goma", "clangscandeps"]
+        os: ["ubuntu-20.04"]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,4 +39,4 @@ jobs:
         run: echo "$(pwd)/depot_tools" >> $GITHUB_PATH
 
       - name: Bazel Build
-        run: bazel build //:artifacts.tar
+        run: bazel build --config=${{ matrix.includescanner }} --//:use_android_glibc=true //:artifacts.tar
