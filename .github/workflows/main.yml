@@ -57,9 +57,6 @@ jobs:
       - if: runner.os == 'Windows'
         name: Install pacman deps
         shell: C:\msys64\usr\bin\bash.exe {0}
-        run: |
-          pacman -S --noconfirm unzip
-          pacman -S --noconfirm patch
-          pacman -S --noconfirm mingw-w64-x86_64-python
+        run: pacman -S --noconfirm unzip patch mingw-w64-x86_64-python
       - name: Bazel Build
         run: bazel build --config=${{ matrix.includescanner }} --jobs=50 --//:use_android_glibc=true //:artifacts.tar
