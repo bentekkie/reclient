@@ -1,6 +1,7 @@
-name: basic
-run-name: postsubmit run
-
+name: Build //:artifacts.tar
+run-name: Build //:artifacts.tar
+# This gives read-only access to the token.
+permissions: read-all
 on:
   push:
     branches:
@@ -13,23 +14,23 @@ jobs:
   bazel-build:
     strategy:
       matrix:
-        includescanner: ["goma"] #, "clangscandeps"]
+        includescanner: ["goma"] #, "clangscandeps"] # TODO: Add clangscandeps builds
         os: ["ubuntu-20.04", "macos-13", "windows-2019"]
     runs-on: ${{ matrix.os }}
-    steps: 
-      # Clean up unused tools to have more disk space in the GitHub hosted runner.
+    steps:
+    # Clean up unused tools to have more disk space in the GitHub hosted runner.
       - if: runner.os == 'Linux'
         name: Free disk space
         run:
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /usr/local/lib/android
+            sudo rm -rf /usr/share/dotnet
+            sudo rm -rf /usr/local/lib/android
       - name: Checkout
-        uses: actions/checkout@v4
-      - uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
         with:
-          python-version: '3.11'
+          python-version: '3.11' 
       - name: Get Bazel
-        uses: bazel-contrib/setup-bazel@b388b84bb637e50cdae241d0f255670d4bd79f29
+        uses: bazel-contrib/setup-bazel@e403ad507104847c3539436f64a9e9eecc73eeec # v0.8.5
         with:
           # Avoid downloading Bazel every time.
           bazelisk-cache: true
@@ -39,13 +40,13 @@ jobs:
           repository-cache: true
 
       # Checkout the depot tools they are needed by the goma repository
-      - if: contains(matrix.os, 'windows') == false
+      - if: runner.os != 'Windows'
         name: Checkout depot tools
         run: git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-      - if: contains(matrix.os, 'windows') == false
+      - if: runner.os != 'Windows'
         name: Update PATH
         run: echo "$(pwd)/depot_tools" >> $GITHUB_PATH
-      - if: contains(matrix.os, 'windows')
+      - if: runner.os == 'Windows'
         name: Checkout depot tools (win)
         run: git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git C:\src\depot_tools
       - if: runner.os == 'macOS'
