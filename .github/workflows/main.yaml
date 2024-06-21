@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         includescanner: ["goma", "clangscandeps"]
-        os: ["ubuntu-20.04", "macos-13", "windows-2019"]
+        os: ["ubuntu-20.04"] #, "macos-13", "windows-2019"]
     runs-on: ${{ matrix.os }}
     steps:
     # Clean up unused tools to have more disk space in the GitHub hosted runner.
@@ -38,7 +38,10 @@ jobs:
           disk-cache: ${{ github.workflow }}
           # Share repository cache between workflows.
           repository-cache: true
-
+      # downgrade nodejs to unusable version to reproduce bug
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 12
       # Checkout the depot tools they are needed by the goma repository
       - if: runner.os != 'Windows'
         name: Checkout depot tools
