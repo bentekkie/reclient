@@ -93,7 +93,7 @@ build:macos --copt '-fPIC'
 build:glibc_new --cxxopt=-D__GLIBC_NEW__
 
 # need for windows to avoid mt.exe permission error.
-build --action_env=TMPDIR
+# build --action_env=TMPDIR
 # need this for user's application default credentials for integ test
 # with --test_env=RBE_use_application_default_credentials=true
 test:linux --test_env=HOME
