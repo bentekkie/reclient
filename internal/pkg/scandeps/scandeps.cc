@@ -91,7 +91,7 @@ ScandepsService::ScandepsService(std::function<void()> shutdown_server,
       LOG(FATAL) << "Unable to create new " INPUT_PROCESSOR
                     " dependency scanner";
     }
-    LOG(INFO) << "Initializing " INPUT_PROCESSOR " dependency scanner took "
+    LOG(INFO) << "Initializing,noop, " INPUT_PROCESSOR " dependency scanner took "
               << end - start << " seconds";
   }
   init_cv_.notify_all();
